@@ -11,3 +11,9 @@ server/.env
 /dataSources/
 /dataSources.local.xml
 /.idea/workspace.xml
+/.idea/FasterPath.iml
+/.idea/misc.xml
+/.idea/modules.xml
+/.idea/profiles_settings.xml
+/.idea/Project_Default.xml
+/.idea/vcs.xml
