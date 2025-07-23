@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Оптимізація маршрутів</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script>
+        window.GOOGLE_API_KEY = "{{ google_api_key }}";
+        console.log("API Key:", window.GOOGLE_API_KEY);
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key={{ google_api_key }}&libraries=places&loading=async&callback=initMap" async></script>
+    <script>console.log("Google Maps API script loaded");</script>
+</head>
+<body>
+    <div class="container">
+        <div class="form-panel">
+            <h1>Побудова маршруту</h1>
+            <div id="points-list">
+                <div class="point-entry">
+                    <input type="text" class="point-input" placeholder="Введіть місце (наприклад, Київ, Україна)" required>
+                    <button class="remove-point" disabled>✕</button>
+                </div>
+            </div>
+            <button id="add-point">Додати точку</button>
+            <div class="form-group">
+                <label for="travel-mode">Тип транспорту:</label>
+                <select id="travel-mode">
+                    <option value="DRIVING">Автомобіль</option>
+                    <option value="WALKING">Пішки</option>
+                    <option value="BICYCLING">Велосипед</option>
+                    <option value="TRANSIT">Громадський транспорт</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="checkbox" id="is-round-trip">
+                <label for="is-round-trip">Закільцьований маршрут</label>
+            </div>
+            <div class="form-group">
+                <button id="build-route">Побудувати маршрут</button>
+                <button id="save-route" disabled>Зберегти маршрут</button>
+            </div>
+            <div id="route-details" class="hidden">
+                <p><strong>Час:</strong> <span id="route-time"></span></p>
+                <p><strong>Відстань:</strong> <span id="route-distance"></span></p>
+            </div>
+        </div>
+        <div class="map-panel">
+            <div id="map"></div>
+        </div>
+    </div>
+    <script src="/script.js"></script>
+</body>
+</html>
