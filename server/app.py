@@ -1,24 +1,22 @@
-import json
-from datetime import datetime
-
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory, render_template
+from flask_cors import CORS
 from dotenv import load_dotenv
 import os
 import requests
 from cachetools import TTLCache
 from route_optimizer import optimize_route
+import json
+from datetime import datetime
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder="../client")
+CORS(app)
 
 load_dotenv()
-
 GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
 if not GOOGLE_API_KEY:
     raise ValueError("GOOGLE_API_KEY not found in .env file")
 
-# Ініціалізація кешу (TTL=3600 секунд, тобто 1 година; maxsize=1000 записів)
 geocode_cache = TTLCache(maxsize=1000, ttl=3600)
-
 
 ROUTES_FILE = "routes.json"
 
@@ -38,15 +36,17 @@ def write_routes(routes):
     with open(ROUTES_FILE, 'w') as f:
         json.dump({"routes": routes}, f, indent=2)
 
-# Ініціалізація JSON-файлу при запуску
 init_routes_file()
 
-
-
-# Базовий маршрут для тестування
+# Рендеринг index.html
 @app.route('/')
-def home():
-    return jsonify({"message": "Flask server is running!"})
+def serve_index():
+    return render_template("index.html", google_api_key=GOOGLE_API_KEY)
+
+# Статичні файли з папки client
+@app.route('/<path:path>')
+def serve_client(path):
+    return send_from_directory("../client", path)
 
 # Ендпоінт для геокодування
 @app.route('/geocode', methods=['POST'])
@@ -55,7 +55,6 @@ def geocode():
     if not data:
         return jsonify({"error": "No JSON data provided"}), 400
 
-    # Перевірка, чи є поле address (пряме геокодування) або lat/lng (зворотне геокодування)
     address = data.get('address')
     lat = data.get('lat')
     lng = data.get('lng')
@@ -63,10 +62,7 @@ def geocode():
     if not address and (lat is None or lng is None):
         return jsonify({"error": "Provide either 'address' or both 'lat' and 'lng'"}), 400
 
-    # Формування ключа для кешу
     cache_key = address if address else f"{lat},{lng}"
-
-    # Перевірка, чи є результат у кеші
     if cache_key in geocode_cache:
         return jsonify(geocode_cache[cache_key])
 
@@ -75,25 +71,20 @@ def geocode():
 
     try:
         if address:
-            # (адреса → координати)
             params["address"] = address
-            params["region"] = "ua"  # Обмеження результатів Україною
+            params["region"] = "ua"
         else:
-            # (координати → адреса)
             params["latlng"] = f"{lat},{lng}"
 
-        # Виконання запиту до Google Geocoding API
         response = requests.get(base_url, params=params)
-        response.raise_for_status()  # виняток для HTTP- помилок
+        response.raise_for_status()
         result = response.json()
 
         if result["status"] != "OK":
             return jsonify({"error": f"Geocoding API error: {result['status']}", "details": result.get("error_message")}), 500
 
         first_result = result["results"][0]
-
         if address:
-            # Для прямого геокодування повертаємо координати
             location = first_result["geometry"]["location"]
             geocode_result = {
                 "lat": location["lat"],
@@ -101,7 +92,6 @@ def geocode():
                 "formatted_address": first_result["formatted_address"]
             }
         else:
-            # Для зворотного геокодування повертаємо адресу
             geocode_result = {
                 "address": first_result["formatted_address"],
                 "lat": first_result["geometry"]["location"]["lat"],
@@ -116,7 +106,7 @@ def geocode():
     except (KeyError, IndexError):
         return jsonify({"error": "Invalid response from Geocoding API"}), 500
 
-
+# Ендпоінт для оптимізації маршруту
 @app.route('/optimize_route', methods=['POST'])
 def optimize_route_endpoint():
     data = request.get_json()
@@ -138,8 +128,8 @@ def optimize_route_endpoint():
         result = optimize_route(points, travel_mode, is_round_trip)
         return jsonify({
             "ordered_points": result["ordered_points"],
-            "total_distance": result["total_distance"],  # У метрах
-            "total_duration": result["total_duration"]   # У секундах
+            "total_distance": result["total_distance"],
+            "total_duration": result["total_duration"]
         })
 
     except ValueError as e:
@@ -147,7 +137,7 @@ def optimize_route_endpoint():
     except Exception as e:
         return jsonify({"error": f"Route optimization failed: {str(e)}"}), 500
 
-
+# Ендпоінт для збереження маршруту
 @app.route('/save_route', methods=['POST'])
 def save_route():
     data = request.get_json()
@@ -171,7 +161,6 @@ def save_route():
 
     try:
         routes = read_routes()
-        # Генерація нового ID
         new_id = max([route["id"] for route in routes], default=0) + 1
         new_route = {
             "id": new_id,
@@ -188,6 +177,7 @@ def save_route():
     except Exception as e:
         return jsonify({"error": f"Failed to save route: {str(e)}"}), 500
 
+# Ендпоінт для отримання списку маршрутів
 @app.route('/saved_routes', methods=['GET'])
 def get_saved_routes():
     try:
@@ -196,7 +186,6 @@ def get_saved_routes():
 
     except Exception as e:
         return jsonify({"error": f"Failed to retrieve routes: {str(e)}"}), 500
-
 
 if __name__ == '__main__':
     app.run(debug=True)

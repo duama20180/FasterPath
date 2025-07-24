@@ -17,3 +17,4 @@ server/.env
 /.idea/profiles_settings.xml
 /.idea/Project_Default.xml
 /.idea/vcs.xml
+/server/routes.json
