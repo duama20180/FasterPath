@@ -41,10 +41,28 @@
 ---
 
 ## Screenshots
+<div style="display: flex; justify-content: space-between; flex-wrap: nowrap; gap: 20px; margin-bottom: 20px;">
+  <div style="flex: 1; min-width: 0; text-align: center;">
+    <img src="https://raw.githubusercontent.com/duama20180/FasterPath/main/screenshots/1_1.png" alt="Before" style="width: 100%; max-width: 500px; height: auto;">
+    <p><strong>Before</strong></p>
+  </div>
+  <div style="flex: 1; min-width: 0; text-align: center;">
+    <img src="https://raw.githubusercontent.com/duama20180/FasterPath/main/screenshots/1_2.png" alt="After" style="width: 100%; max-width: 500px; height: auto;">
+    <p><strong>After</strong></p>
+  </div>
+</div>
 
+<div style="display: flex; justify-content: space-between; flex-wrap: nowrap; gap: 20px; margin-bottom: 20px;">
+  <div style="flex: 1; min-width: 0; text-align: center;">
+    <img src="https://raw.githubusercontent.com/duama20180/FasterPath/main/screenshots/2_1.png" alt="Before" style="width: 100%; max-width: 500px; height: auto;">
+    <p><strong>Before</strong></p>
+  </div>
+  <div style="flex: 1; min-width: 0; text-align: center;">
+    <img src="https://raw.githubusercontent.com/duama20180/FasterPath/main/screenshots/2_2.png" alt="After" style="width: 100%; max-width: 500px; height: auto;">
+    <p><strong>After</strong></p>
+  </div>
+</div>
 
-
-✅ Optimized order with minimum travel time
 
 ---
 
