@@ -18,3 +18,4 @@ server/.env
 /.idea/Project_Default.xml
 /.idea/vcs.xml
 /server/routes.json
+/.idea/inspectionProfiles/Project_Default.xml

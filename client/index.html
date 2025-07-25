@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Додаток для оптимізації маршрутів">
-    <title>Оптимізація маршрутів</title>
+    <meta name="description" content="Route optimization application">
+    <title>Route Optimization</title>
     <link rel="stylesheet" href="/styles.css">
     <script>
         window.GOOGLE_API_KEY = "{{ google_api_key | tojson }}";
@@ -18,48 +18,48 @@
 <body>
     <main class="container">
         <section class="form-panel">
-            <h1>Побудова маршруту</h1>
+            <h1>Build Route</h1>
             <form id="route-form">
                 <fieldset>
-                    <legend>Точки маршруту</legend>
+                    <legend>Route Points</legend>
                     <div id="points-list">
                         <div class="point-entry">
-                            <input type="text" class="point-input" placeholder="Введіть місце (наприклад, Київ, Україна)" required>
-                            <button type="button" class="remove-point" disabled aria-label="Видалити точку">✕</button>
+                            <input type="text" class="point-input" placeholder="Enter a place (e.g., Kyiv, Ukraine)" required>
+                            <button type="button" class="remove-point" disabled aria-label="Remove point">✕</button>
                         </div>
                     </div>
-                    <button type="button" id="add-point">Додати точку</button>
+                    <button type="button" id="add-point">Add Point</button>
                 </fieldset>
 
                 <div class="form-group">
-                    <label for="travel-mode">Тип транспорту:</label>
-                    <select id="travel-mode" aria-label="Оберіть тип транспорту">
-                        <option value="DRIVING">Автомобіль</option>
-                        <option value="WALKING">Пішки</option>
-                        <option value="BICYCLING">Велосипед</option>
-                        <option value="TRANSIT">Громадський транспорт</option>
+                    <label for="travel-mode">Transport Type:</label>
+                    <select id="travel-mode" aria-label="Select transport type">
+                        <option value="DRIVING">Car</option>
+                        <option value="WALKING">Walking</option>
+                        <option value="BICYCLING">Bicycle</option>
+                        <option value="TRANSIT">Public Transport</option>
                     </select>
                 </div>
 
                 <div class="form-group">
                     <input type="checkbox" id="is-round-trip">
-                    <label for="is-round-trip">Закільцьований маршрут</label>
+                    <label for="is-round-trip">Round Trip</label>
                 </div>
 
                 <div class="form-group">
-                    <button type="button" id="build-route">Побудувати маршрут</button>
-                    <button type="button" id="save-route" disabled>Зберегти маршрут</button>
+                    <button type="button" id="build-route">Build Route</button>
+                    <button type="button" id="save-route" disabled>Save Route</button>
                 </div>
             </form>
 
             <div id="route-details" class="hidden" aria-live="polite">
-                <p><strong>Час:</strong> <span id="route-time"></span></p>
-                <p><strong>Відстань:</strong> <span id="route-distance"></span></p>
+                <p><strong>Time:</strong> <span id="route-time"></span></p>
+                <p><strong>Distance:</strong> <span id="route-distance"></span></p>
             </div>
         </section>
 
-        <section class="map-panel" aria-label="Мапа маршруту">
-            <div id="map" role="application" aria-label="Інтерактивна мапа"></div>
+        <section class="map-panel" aria-label="Route map">
+            <div id="map" role="application" aria-label="Interactive map"></div>
         </section>
     </main>
 

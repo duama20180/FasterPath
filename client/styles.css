@@ -86,13 +86,19 @@ h1 {
 
 .form-group {
     margin-top: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.form-group input[type="checkbox"] {
+    margin: 0;
 }
 
 .form-group label {
-    display: block;
+    margin: 0;
     font-size: 14px;
     color: #374151;
-    margin-bottom: 4px;
 }
 
 #travel-mode {

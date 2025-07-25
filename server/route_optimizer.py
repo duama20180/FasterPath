@@ -45,8 +45,8 @@ def get_distance_matrix(points, travel_mode):
                 if element["status"] != "OK":
                     raise ValueError(f"Element error: {element['status']}")
                 row_distances.append({
-                    "distance": element["distance"]["value"],  # Відстань у метрах
-                    "duration": element["duration"]["value"]  # Час у секундах
+                    "distance": element["distance"]["value"],
+                    "duration": element["duration"]["value"]
                 })
             matrix.append(row_distances)
 
